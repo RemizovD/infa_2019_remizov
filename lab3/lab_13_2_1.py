@@ -1,5 +1,6 @@
 from graph import *
 from math import *
+windowSize(500,600)
 def OVAL(x,y,r,nx,ny,ug,t,c1,c2): 
     a=[]
     penSize(t)

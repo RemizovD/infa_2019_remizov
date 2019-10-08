@@ -1,5 +1,6 @@
 from graph import *
 
+windowSize(500,600)
 penColor("white")
 brushColor(90,70,0)
 rectangle(0,0, 500, 250)

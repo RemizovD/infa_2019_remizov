@@ -41,7 +41,7 @@ Copyright (c) 2016-2018, Константин Поляков
 """
 
 """
-Исходя из http://docs.python.org/3/library/sys.html внесены исправления для 
+Исходя из http://docs.python.org/3/library/sys.html внесены исправления для
 обеспечения работоспособности в ОС Linux (С. Целищев).
 """
 from sys import platform
@@ -79,8 +79,8 @@ elif platform == "linux":
         VK_RETURN = 0x24 # RETURN key
         VK_ESCAPE = 0x09 # ESC key
 
-DEF_GRAPH_WIDTH = 500
-DEF_GRAPH_HEIGHT = 600
+DEF_GRAPH_WIDTH = 5000
+DEF_GRAPH_HEIGHT = 6000
 
 import tkinter
 from random import randint
@@ -285,6 +285,16 @@ def circle(x, y, R):
                  width = _penSize,
                  fill = _brushColor)
   return circ
+
+
+def ellips(x1, y1, x2, y2):
+    x1, y1 = transformCoord ( x1, y1 )
+    x2, y2 = transformCoord ( x2, y2 )
+    circ = _C.create_oval(x1, y1, x2, y2,
+                 outline = _penColor,
+                 width = _penSize,
+                 fill = _brushColor)
+    return circ
 #----------------------------------
 def polygon(points):
   coord = unpackCoord(points)

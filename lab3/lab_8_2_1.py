@@ -1,4 +1,5 @@
 from graph import *
+windowSize(500,600)
 def OKNO(x,y,n):
     penColor("white")
     penSize(10)

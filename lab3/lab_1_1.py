@@ -1,5 +1,6 @@
 from graph import *
 
+windowSize(500,600)
 penColor(255,0,255)
 penSize(5)
 penColor("black")
