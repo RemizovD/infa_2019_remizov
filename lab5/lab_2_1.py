@@ -53,25 +53,28 @@ def SILA():
     global sila,q
     if (q==1 and sila <3):
         sila=sila+0.1
+    print (sila)
 def ZAPUSK2(event):
     global sila,q,ugol, shar_x, shar_y, shar_r, shar_vx, shar_vx0, shar_vy, shar_vy0, shar_ris, shar_cvet, shar_t , shar_kol
     q=0
-    sila=0
     i=0
     z=0
+    print (sila)
     while z!=1:
         if(shar_ris[i]==0):
             shar_x[i] = 20+(sila+2)*cos(ugol)*20
             shar_y[i] = 450-(sila+2)*sin(ugol)*20
             shar_r[i] = 20
-            shar_vx[i] = (sila+2)*cos(ugol)*20
+            shar_vx[i] = (sila+0.2)*cos(ugol)*20
             shar_vx0[i] = shar_vx[i]
-            shar_vy[i] = (sila+2)*sin(ugol)*20
+            shar_vy[i] = (sila+0.2)*sin(ugol)*20
             shar_vy0[i] = shar_vy[i]
             shar_cvet[i] = "blue"
             shar_t[i] = 100
             z=1
             shar_kol=shar_kol+1
+            sila=0
+            PUSHKA_PRICEL('')
         elif(i>=len(shar_r)-1):
             shar_ris.append(0)
             shar_x.append(0)
@@ -189,4 +192,4 @@ def new_game(event=''):
 
 new_game()
 
-# mainloop()
+mainloop()
