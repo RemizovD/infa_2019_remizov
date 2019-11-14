@@ -192,7 +192,6 @@ def new_game(event=''):
     while t1.live or balls:
         b=0
         while(b<len(balls)):
-            print (len(balls))
             if balls[b].hittest(t1) and t1.live:
                 t1.live = 0
                 t1.hit()

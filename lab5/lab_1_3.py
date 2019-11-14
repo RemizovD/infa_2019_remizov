@@ -10,8 +10,8 @@ import time
 root = tk.Tk()
 fr = tk.Frame(root)
 root.geometry('800x600')
-canv = tk.Canvas(root, bg='white')
-canv.pack(fill=tk.BOTH, expand=1)
+canv = tk.Canvas(root, bg='white', width = 800, height = 600)
+canv.pack(fill=tk.BOTH, expand=0)
 
 def SHAR(n):
     global shar_x, shar_y, shar_r, shar_vx, shar_vx0, shar_vy, shar_vy0, shar_ris, shar_cvet, shar_t, shar_kol
@@ -32,12 +32,14 @@ def SHAR(n):
     canv.delete(shar_ris[n])
     shar_ris[n] = canv.create_oval(shar_x[n] - shar_r[n], shar_y[n] - shar_r[n], shar_x[n] + shar_r[n], shar_y[n] + shar_r[n], fill=shar_cvet[n])
 def PUSHKA_PRICEL(event):
-    global ugol, q, sila , pushka
+    global ugol, q, sila , pushka , px, py, mx, my
     if event:
-        if(event.x-20>0):
-            ugol = math.atan((450-event.y) / (event.x-20))
-        elif (event.x-20<0):
-            ugol = pi + math.atan((450-event.y) / (event.x-20))
+        mx=event.x
+        my=event.y
+        if(event.x-px>0):
+            ugol = math.atan((py-event.y) / (event.x-px))
+        elif (event.x-px<0):
+            ugol = pi + math.atan((py-event.y) / (event.x-px))
         else:
             ugol = pi
     if (q==1):
@@ -45,7 +47,20 @@ def PUSHKA_PRICEL(event):
     else:
         c = 'black'
     canv.delete(pushka)
-    pushka = canv.create_line(20,450,20+(sila+2)*cos(ugol)*20,450-(sila+2)*sin(ugol)*20,width=7,fill=c)
+    pushka = canv.create_line(px,py,px+(sila+2)*cos(ugol)*20,py-(sila+2)*sin(ugol)*20,width=7,fill=c)
+def PUSHKA_DVIZHENIE1(event):
+    global pd
+    pd=1
+def PUSHKA_DVIZHENIE2(event):
+    global pd
+    pd=0
+def PUSHKA_DVIZHENIE3():
+    global pd, px , py , ugol, mx, my
+    if abs(px-mx)<20 and abs(py-my)<20:
+        pd=0
+    if pd==1 and mx>20 and mx<780 and my>20 and my<580:
+        px=px+5*cos(ugol)
+        py=py-5*sin(ugol)
 def ZAPUSK1(event):
     global q
     q=1
@@ -54,14 +69,14 @@ def SILA():
     if (q==1 and sila <3):
         sila=sila+0.1
 def ZAPUSK2(event):
-    global sila,q,ugol, shar_x, shar_y, shar_r, shar_vx, shar_vx0, shar_vy, shar_vy0, shar_ris, shar_cvet, shar_t , shar_kol
+    global sila,q,ugol, shar_x, shar_y, shar_r, shar_vx, shar_vx0, shar_vy, shar_vy0, shar_ris, shar_cvet, shar_t, shar_kol, px, py
     q=0
     i=0
     z=0
     while z!=1:
         if(shar_ris[i]==0):
-            shar_x[i] = 20+(sila+2)*cos(ugol)*20
-            shar_y[i] = 450-(sila+2)*sin(ugol)*20
+            shar_x[i] = px+(sila+2)*cos(ugol)*20
+            shar_y[i] = py-(sila+2)*sin(ugol)*20
             shar_r[i] = 20
             shar_vx[i] = (sila+0.2)*cos(ugol)*20
             shar_vx0[i] = shar_vx[i]
@@ -92,16 +107,23 @@ def CEL(n):
     cel_y[n] = cel_y[n]+cel_vy[n]
     canv.delete(cel_ris[n])
     cel_ris[n] = canv.create_oval(cel_x[n] - cel_r[n], cel_y[n] - cel_r[n], cel_x[n] + cel_r[n], cel_y[n] + cel_r[n], fill="red")
-
+ochki=0
 screen1 = canv.create_text(400, 300, text='', font='28')
 def new_game(event=''):
-    global screen1, shar_x, shar_y, shar_vx, shar_vx0, shar_vy, shar_vy0, shar_cvet, shar_t, shar_r, shar_ris, shar_kol, q, cel_x, cel_y, cel_vx, cel_vy, cel_r, cel_ris, pushka, sila, ugol
+    global screen1,schet, ochki, mx, my, shar_x, shar_y, shar_vx, shar_vx0, shar_vy, shar_vy0, shar_cvet, shar_t, shar_r, shar_ris, shar_kol, q, cel_x, cel_y, cel_vx, cel_vy, cel_r, cel_ris, pushka, sila, ugol, px, py, pd
     canv.update()
     canv.itemconfig(screen1, text='')
+    schet = canv.create_text(50, 50, text='Очки '+ str(ochki))
     q=0
     sila=0
     pushka=0
     ugol =0
+    pd=0
+    mx=0
+    my=0
+    zz=1
+    px =20
+    py =450
     shar_x =[0]
     shar_y =[0]
     shar_r =[-1]
@@ -123,6 +145,8 @@ def new_game(event=''):
     PUSHKA_PRICEL('')
     canv.bind('<Button-1>', ZAPUSK1)
     canv.bind('<ButtonRelease-1>', ZAPUSK2)
+    canv.bind('<Button-3>', PUSHKA_DVIZHENIE1)
+    canv.bind('<ButtonRelease-3>', PUSHKA_DVIZHENIE2)
     canv.bind('<Motion>', PUSHKA_PRICEL)
     z=3
     for p in range (0,3):
@@ -140,6 +164,7 @@ def new_game(event=''):
         b=0
         SILA()
         PUSHKA_PRICEL("")
+        PUSHKA_DVIZHENIE3()
         while(b < len(shar_r) ):
             if (shar_t[b] < 0 and shar_r[b]!=-1 and len(shar_r)>=2):
                 canv.delete(shar_ris[b])
@@ -177,15 +202,26 @@ def new_game(event=''):
                          cel_vy[p] =0
                          z=z-1
             b=b+1
+        for p in range (0,3):
+            if((px-cel_x[p])**2+(py-cel_y[p])**2<=(20*sila+40+cel_r[p])**2):
+                z=0
+                zz=0
         time.sleep(0.03)
         canv.update()
     
     canv.bind('<Motion>', '')
     canv.bind('<Button-1>', '')
+    canv.bind('<Button-3>', '')
     canv.bind('<ButtonRelease-1>', '')
+    canv.bind('<ButtonRelease-3>', '')
     canv.delete(ALL)
     screen1 = canv.create_text(400, 300, text='', font='28')
-    canv.itemconfig(screen1, text='Вы уничтожили цели за ' + str(shar_kol) + ' выстрелов')
+    if zz==1:
+        canv.itemconfig(screen1, text='Вы уничтожили цели за ' + str(shar_kol) + ' выстрелов.')
+        ochki=ochki+1
+    else:
+        canv.itemconfig(screen1, text='Вы проиграли.')
+        ochki=ochki-5  
     root.after(1800, new_game)
 
 
